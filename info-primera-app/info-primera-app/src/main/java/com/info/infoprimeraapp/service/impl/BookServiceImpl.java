@@ -1,0 +1,53 @@
+package com.info.infoprimeraapp.service.impl;
+
+import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.service.BookService;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+@Service
+public class BookServiceImpl implements BookService {
+
+    Map<UUID, Book> bookMap;
+
+    public BookServiceImpl() {
+        bookMap = new HashMap<>();
+
+        Book book = new Book();
+        book.setUuid(UUID.randomUUID());
+        book.setAuthor("Julio Cortazar");
+        book.setTitle("Rayuela");
+
+        Book book1 = new Book();
+        book1.setUuid(UUID.randomUUID());
+        book1.setAuthor("Gabriel García Marquez");
+        book1.setTitle("Cien años de soledad");
+
+        Book book2 = new Book();
+        book2.setUuid(UUID.randomUUID());
+        book2.setAuthor("Alejandro Dolina");
+        book2.setTitle("Cartas marcadas");
+
+        bookMap.put(book.getUuid(), book);
+        bookMap.put(book1.getUuid(), book);
+        bookMap.put(book2.getUuid(), book);
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        return new ArrayList<>(bookMap.values());
+    }
+
+    @Override
+    public Book createBook(Book book) {
+        book.setUuid(UUID.randomUUID());
+        bookMap.put(book.getUuid(), book);
+        return book;
+    }
+
+    @Override
+    public String getBook(String title) {
+        return title;
+    }
+}

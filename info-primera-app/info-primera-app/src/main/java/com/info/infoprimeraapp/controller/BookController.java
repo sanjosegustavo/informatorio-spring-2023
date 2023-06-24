@@ -1,24 +1,39 @@
 package com.info.infoprimeraapp.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
 
 @RestController // Anotación a nivel de clase
 public class BookController {
 
-    //Get --> Obtener
-    //http://localhost:8080/aplicacion/v1/despedida
-    @GetMapping("/aplicacion/v1/despedida")  // Anotación a nivel de método
-    public String adiosMundo() {
-        return "Adios mundo.";
+    //IoC Inversión de control
+    BookService bookService;
+
+    @Autowired
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
-    //http://localhost:8080/aplicacion/v1/saludo?nombre=Marcelo
-    @GetMapping("/aplicacion/v1/saludo")
-    public String holaMundo(@RequestParam(required = true, name = "nombre") String nombre) {
-        // @RequestParam(required = true, name = "nombre") String nombre Anotación a nivel de atributo
-        return "Hola " + nombre;
+    //GET --> Obtener un recurso
+    @GetMapping("api/v1/book")
+    public List<Book> getAllBooks() {
+        return bookService.getAllBooks();
     }
 
+    //POST --> Crear un recurso
+    @PostMapping("api/v1/book")
+    public Book createBook(@RequestBody Book book) {
+        return bookService.createBook(book);
+    }
+
+    @GetMapping("/api/v1/book_title")
+    public String getBook(@RequestParam(required = true, name = "title") String title) {
+        return bookService.getBook(title);
+    }
 }
