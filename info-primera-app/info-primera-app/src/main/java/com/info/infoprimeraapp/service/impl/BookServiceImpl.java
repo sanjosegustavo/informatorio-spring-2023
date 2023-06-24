@@ -30,8 +30,8 @@ public class BookServiceImpl implements BookService {
         book2.setTitle("Cartas marcadas");
 
         bookMap.put(book.getUuid(), book);
-        bookMap.put(book1.getUuid(), book);
-        bookMap.put(book2.getUuid(), book);
+        bookMap.put(book1.getUuid(), book1);
+        bookMap.put(book2.getUuid(), book2);
     }
 
     @Override
@@ -47,7 +47,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String getBook(String title) {
-        return title;
+    public Book getBook(String title) {
+        //realizado como tarea
+        Book book = new Book();
+        for (Map.Entry<UUID, Book> entry : bookMap.entrySet()) {
+            if (entry.getValue().getTitle().equalsIgnoreCase(title)) {
+                book = entry.getValue();
+                break;
+            }
+        }
+        return book;
     }
+
 }

@@ -33,7 +33,7 @@ public class BookController {
     }
 
     @GetMapping("/api/v1/book_title")
-    public String getBook(@RequestParam(required = true, name = "title") String title) {
+    public Book getBook(@RequestParam(required = true, name = "title") String title) {
         return bookService.getBook(title);
     }
 }

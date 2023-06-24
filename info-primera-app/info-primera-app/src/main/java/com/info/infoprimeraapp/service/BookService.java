@@ -11,6 +11,6 @@ public interface BookService {
 
     Book createBook(Book book);
 
-    String getBook(String title);
+    Book getBook(String title);
 
 }
