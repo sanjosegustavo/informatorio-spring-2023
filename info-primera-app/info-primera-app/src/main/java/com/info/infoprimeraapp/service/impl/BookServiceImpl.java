@@ -77,7 +77,6 @@ public class BookServiceImpl implements BookService {
 
         if(book != null){
             bookMap.remove(uuidBook);
-            System.out.println(bookMap);
             return "deleted Book";
         }else{
             return "Book not found";
