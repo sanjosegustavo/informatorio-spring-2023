@@ -92,4 +92,14 @@ public class BookServiceImpl implements BookService {
             book.setAuthor(bookUpdated.getAuthor());
         }
     }
+
+    private boolean deleteBookByName(String title){
+        for (Book book : bookMap.values()) {
+            if(book.getTitle().equalsIgnoreCase(title)){
+                bookMap.values().remove(book);
+                return true;
+            }
+        }
+        return false;
+    }
 }
