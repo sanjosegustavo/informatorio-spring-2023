@@ -4,10 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -19,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Book {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -27,10 +25,10 @@ public class Book {
     @Column(updatable = false, nullable = false, length = 36, columnDefinition = "varchar(36)")
     private UUID uuid;
 
-    @Column(length = 40, columnDefinition = "varchar(40)", updatable = true, nullable = false)
+    @Column(length = 100, columnDefinition = "varchar(100)", updatable = true, nullable = false)
     private String title;
 
-    @Column(length = 40, columnDefinition = "varchar(40)", updatable = true, nullable = false)
+    @Column(length = 100, columnDefinition = "varchar(100)", updatable = true, nullable = false)
     private String author;
 
     @Column(unique = true)

@@ -1,8 +1,8 @@
-package com.info.infoprimeraapp.service.impl;
+package com.info.infoprimeraapp.service.author.impl;
 
 import com.info.infoprimeraapp.domain.Author;
 import com.info.infoprimeraapp.repository.author.AuthorRepository;
-import com.info.infoprimeraapp.service.AuthorService;
+import com.info.infoprimeraapp.service.author.AuthorService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
