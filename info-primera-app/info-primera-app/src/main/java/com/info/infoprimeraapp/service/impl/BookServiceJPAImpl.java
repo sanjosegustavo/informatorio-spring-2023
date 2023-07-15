@@ -34,6 +34,10 @@ public class BookServiceJPAImpl implements BookService {
 
     @Override
     public Book getBook(String title) {
+        Optional<Book> bookOptional = bookRepository.findBookByTitleEqualsIgnoreCase(title);
+        if (bookOptional.isPresent()) {
+            return bookOptional.get();
+        }
         return null;
     }
 
@@ -53,8 +57,12 @@ public class BookServiceJPAImpl implements BookService {
     }
 
     @Override
-    public String deleteBook(UUID uuidBook) {
-        return null;
+    public boolean deleteBook(UUID uuidBook) {
+        if (bookRepository.findById(uuidBook).isPresent()) {
+            bookRepository.deleteById(uuidBook);
+            return true;
+        }
+        return false;
     }
 
     private void updatingBook(Book book, Book bookUpdated){

@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api/v1/author")
 public class AuthorController {
 
     AuthorService authorService;
@@ -21,12 +22,12 @@ public class AuthorController {
     }
 
     //POST --> Crear un recurso
-    @PostMapping("api/v1/author")
+    @PostMapping()
     public Author createAuthor(@RequestBody Author author) {
         return authorService.createAuthor(author);
     }
 
-    @DeleteMapping("/api/v1/author/{idAuthor}")
+    @DeleteMapping("/{idAuthor}")
     public String deleteAuthor(@PathVariable(value = "idAuthor") UUID idAuthor){
         if (authorService.deleteAutor(idAuthor)) {
             return "Eliminado";
@@ -34,12 +35,12 @@ public class AuthorController {
         return "No se pudo eliminar";
     }
 
-    @GetMapping("/api/v1/author/{nombre}/{apellido}")
+    @GetMapping("/{nombre}/{apellido}")
     public Author getAuthor(@PathVariable(value = "nombre") String nombre, @PathVariable(value = "apellido") String apellido) {
         return authorService.getAuthor(nombre, apellido);
     }
 
-    @GetMapping("/api/v1/author/{idAuthor}")
+    @GetMapping("/{idAuthor}")
     public Author getAuthor(@PathVariable(value = "idAuthor") UUID idAuthor) {
         Optional<Author> authorOptional = authorService.getAuthor(idAuthor);
         if (authorOptional.isPresent()) {

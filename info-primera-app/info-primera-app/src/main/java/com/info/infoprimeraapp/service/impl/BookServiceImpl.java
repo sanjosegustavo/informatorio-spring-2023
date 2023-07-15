@@ -72,14 +72,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String deleteBook(UUID uuidBook) {
+    public boolean deleteBook(UUID uuidBook) {
         Book book = bookMap.get(uuidBook);
 
         if(book != null){
             bookMap.remove(uuidBook);
-            return "deleted Book";
+            return true;
         }else{
-            return "Book not found";
+            return false;
         }
     }
 
