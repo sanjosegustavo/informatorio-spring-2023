@@ -1,7 +1,6 @@
 package com.info.infoprimeraapp.service.book;
 
 import com.info.infoprimeraapp.domain.Book;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
