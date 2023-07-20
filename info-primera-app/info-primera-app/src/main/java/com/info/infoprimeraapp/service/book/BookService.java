@@ -18,4 +18,6 @@ public interface BookService {
 
     boolean deleteBook(UUID uuidBook);
 
+    Optional<Book> getBookById(UUID uuidBook);
+
 }

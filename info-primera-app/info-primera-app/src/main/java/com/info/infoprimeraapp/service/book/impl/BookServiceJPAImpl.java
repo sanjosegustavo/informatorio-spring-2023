@@ -27,8 +27,7 @@ public class BookServiceJPAImpl implements BookService {
     @Override
     public Book createBook(Book book) {
         book.setUuid(UUID.randomUUID());
-        bookRepository.save(book); // Guardar en la base de datos
-        return book;
+        return bookRepository.save(book); // Guardar en la base de datos
     }
 
     @Override
@@ -62,6 +61,11 @@ public class BookServiceJPAImpl implements BookService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Optional<Book> getBookById(UUID uuidBook) {
+        return Optional.of(bookRepository.findById(uuidBook)).orElse(null);
     }
 
     private void updatingBook(Book book, Book bookUpdated){
