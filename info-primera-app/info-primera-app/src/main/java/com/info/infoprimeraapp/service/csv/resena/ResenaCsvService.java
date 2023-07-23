@@ -1,6 +1,5 @@
 package com.info.infoprimeraapp.service.csv.resena;
 
-import com.info.infoprimeraapp.model.BookCsvRecord;
 import com.info.infoprimeraapp.model.ResenaCsvRecord;
 
 import java.io.File;

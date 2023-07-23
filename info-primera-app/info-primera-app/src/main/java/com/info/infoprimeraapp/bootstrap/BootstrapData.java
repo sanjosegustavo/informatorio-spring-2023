@@ -1,12 +1,16 @@
 package com.info.infoprimeraapp.bootstrap;
 
 import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.domain.Editorial;
 import com.info.infoprimeraapp.domain.Resena;
 import com.info.infoprimeraapp.model.BookCsvRecord;
+import com.info.infoprimeraapp.model.EditorialCsvRecord;
 import com.info.infoprimeraapp.model.ResenaCsvRecord;
 import com.info.infoprimeraapp.repository.book.BookRepository;
+import com.info.infoprimeraapp.repository.editorial.EditorialRepository;
 import com.info.infoprimeraapp.repository.resena.ResenaRepository;
 import com.info.infoprimeraapp.service.csv.book.BookCsvService;
+import com.info.infoprimeraapp.service.csv.editorial.EditorialCsvService;
 import com.info.infoprimeraapp.service.csv.resena.ResenaCsvService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +35,40 @@ public class BootstrapData implements CommandLineRunner {
     private final ResenaRepository resenaRepository;
     private final ResenaCsvService resenaCsvService;
 
+    private final EditorialRepository editorialRepository;
+    private final EditorialCsvService editorialCsvService;
+
 
     @Override
     public void run(String... args) throws Exception {
         log.info("Corriendo BootstrapData");
         loadBookData();
         loadResenaData();
+        loadEditorialData();
+    }
+
+    private void loadEditorialData() throws FileNotFoundException {
+        if (editorialRepository.count() < 100) {
+            File file = ResourceUtils.getFile("classpath:csvdata/editorial_data.csv");
+            List<EditorialCsvRecord> editorialCsvRecordList = editorialCsvService.convertCsv(file);
+
+            if (!editorialCsvRecordList.isEmpty()) {
+                log.info("Cargando editoriales en la base de datos.");
+                for (EditorialCsvRecord editorialCsvRecord : editorialCsvRecordList) {
+                    editorialRepository.save(
+                            Editorial.builder()
+                                    .id(UUID.randomUUID())
+                                    .nombre(editorialCsvRecord.getNombre())
+                                    .direccion(editorialCsvRecord.getDireccion())
+                                    .ciudad(editorialCsvRecord.getCiudad())
+                                    .pais(editorialCsvRecord.getPais())
+                                    .telefono(editorialCsvRecord.getTelefono())
+                                    .sitioWeb(editorialCsvRecord.getSitioWeb())
+                                    .build()
+                    );
+                }
+            }
+        }
     }
 
     private void loadResenaData() throws FileNotFoundException {
