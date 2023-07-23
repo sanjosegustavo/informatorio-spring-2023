@@ -30,7 +30,7 @@ public class Resena {
     @Column(length = 100, columnDefinition = "varchar(100)", updatable = true, nullable = false)
     private String nombreLibro;
 
-    @Column(length = 100, columnDefinition = "varchar(100)", updatable = true, nullable = false)
+    @Column(length = 300, columnDefinition = "varchar(300)", updatable = true, nullable = false)
     private String contenido;
 
     @Column(updatable = true, nullable = false)
