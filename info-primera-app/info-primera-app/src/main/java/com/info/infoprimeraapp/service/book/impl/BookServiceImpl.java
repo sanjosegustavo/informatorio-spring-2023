@@ -1,7 +1,10 @@
 package com.info.infoprimeraapp.service.book.impl;
 
 import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.mapper.book.BookMapper;
+import com.info.infoprimeraapp.model.dto.book.BookDTO;
 import com.info.infoprimeraapp.service.book.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -11,22 +14,26 @@ public class BookServiceImpl implements BookService {
 
     Map<UUID, Book> bookMap;
 
-    public BookServiceImpl() {
+    private final BookMapper bookMapper;
+
+    @Autowired
+    public BookServiceImpl(BookMapper bookMapper) {
+        this.bookMapper = bookMapper;
         bookMap = new HashMap<>();
 
         Book book = new Book();
         book.setUuid(UUID.randomUUID());
-        book.setAuthor("Julio Cortazar");
+        //book.setAuthor("Julio Cortazar");
         book.setTitle("Rayuela");
 
         Book book1 = new Book();
         book1.setUuid(UUID.randomUUID());
-        book1.setAuthor("Gabriel García Marquez");
+        //book1.setAuthor("Gabriel García Marquez");
         book1.setTitle("Cien años de soledad");
 
         Book book2 = new Book();
         book2.setUuid(UUID.randomUUID());
-        book2.setAuthor("Alejandro Dolina");
+        //book2.setAuthor("Alejandro Dolina");
         book2.setTitle("Cartas marcadas");
 
         bookMap.put(book.getUuid(), book);
@@ -40,8 +47,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
-        book.setUuid(UUID.randomUUID());
+    public Book createBook(BookDTO bookDTO) {
+        Book book = bookMapper.bookDTOtoBook(bookDTO);
+        //Queda pendiente agregar autores.
         bookMap.put(book.getUuid(), book);
         return book;
     }
@@ -84,8 +92,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getBookById(UUID uuidBook) {
-        return Optional.of(bookMap.get(uuidBook));
+    public Optional<BookDTO> getBookById(UUID uuidBook) {
+        return Optional.of(bookMapper.bookToBookDTO(bookMap.get(uuidBook)));
     }
 
     private void updatingBook(Book book, Book bookUpdated){

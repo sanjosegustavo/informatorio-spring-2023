@@ -1,6 +1,11 @@
 package com.info.infoprimeraapp.service.book.impl;
 
+import com.info.infoprimeraapp.domain.Author;
 import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.exceptions.NotFoundException;
+import com.info.infoprimeraapp.mapper.book.BookMapper;
+import com.info.infoprimeraapp.model.dto.book.BookDTO;
+import com.info.infoprimeraapp.repository.author.AuthorRepository;
 import com.info.infoprimeraapp.repository.book.BookRepository;
 import com.info.infoprimeraapp.service.book.BookService;
 import lombok.AllArgsConstructor;
@@ -17,6 +22,8 @@ import java.util.UUID;
 public class BookServiceJPAImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
+    private final AuthorRepository authorRepository;
 
 
     @Override
@@ -25,9 +32,15 @@ public class BookServiceJPAImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
-        book.setUuid(UUID.randomUUID());
-        return bookRepository.save(book); // Guardar en la base de datos
+    public Book createBook(BookDTO bookDTO) throws NotFoundException {
+        Book book = bookMapper.bookDTOtoBook(bookDTO);
+        Optional<Author> optionalAuthor = authorRepository.findById(UUID.fromString(bookDTO.getIdAuthor()));
+
+        if (optionalAuthor.isPresent()) {
+            book.setAuthor(optionalAuthor.get());
+            return bookRepository.save(book);// Guardar en la base de datos
+        }
+        throw new NotFoundException();
     }
 
     @Override
@@ -64,8 +77,13 @@ public class BookServiceJPAImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getBookById(UUID uuidBook) {
-        return Optional.of(bookRepository.findById(uuidBook)).orElse(null);
+    public Optional<BookDTO> getBookById(UUID uuidBook) {
+        Optional<Book> bookOptional = bookRepository.findById(uuidBook);
+
+        if (bookOptional.isPresent()) {
+            return Optional.of(bookMapper.bookToBookDTO(bookOptional.get()));
+        }
+        return Optional.empty();
     }
 
     private void updatingBook(Book book, Book bookUpdated){

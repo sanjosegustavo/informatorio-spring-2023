@@ -10,6 +10,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -36,5 +38,8 @@ public class Author {
     @Column(updatable = true, nullable = false)
     @Temporal(TemporalType.DATE)
     private LocalDate fechaNacimiento;
+
+    @OneToMany(mappedBy = "author")
+    private List<Book> books = new ArrayList<>();
 
 }

@@ -42,11 +42,12 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Corriendo BootstrapData");
-        loadBookData();
-        loadResenaData();
-        loadEditorialData();
+        //loadBookData();
+        //loadResenaData();
+        //loadEditorialData();
     }
 
+    /*
     private void loadEditorialData() throws FileNotFoundException {
         if (editorialRepository.count() < 100) {
             File file = ResourceUtils.getFile("classpath:csvdata/editorial_data.csv");
@@ -115,4 +116,6 @@ public class BootstrapData implements CommandLineRunner {
             }
         }
     }
+
+     */
 }
