@@ -31,7 +31,7 @@ public class BookController {
 
     //GET --> Obtener un recurso
     @GetMapping()
-    public List<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         log.info("Se esta haciendo una consulta por los libros");
         return bookService.getAllBooks();
     }
@@ -55,9 +55,9 @@ public class BookController {
 
     //PUT --> Actualizar un recurso
     @PutMapping("/{idBook}")
-    public ResponseEntity updateBook(@PathVariable(value = "idBook")UUID idBook, @RequestBody Book bookUpdated)
+    public ResponseEntity updateBook(@PathVariable(value = "idBook")UUID idBook, @RequestBody BookDTO bookDTOUpdated)
             throws NotFoundException {
-        Optional<Book> book = bookService.updateBook(idBook, bookUpdated);
+        Optional<Book> book = bookService.updateBook(idBook, bookDTOUpdated);
 
         if (book.isEmpty()){
             log.info("Libro no encontrado");

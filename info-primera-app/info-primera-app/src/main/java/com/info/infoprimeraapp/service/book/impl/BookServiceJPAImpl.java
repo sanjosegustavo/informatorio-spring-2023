@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,8 +28,13 @@ public class BookServiceJPAImpl implements BookService {
 
 
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll(); // Traer todos los libros
+    public List<BookDTO> getAllBooks() {
+        List<Book> bookList = bookRepository.findAll(); // Traer todos los libros
+        List<BookDTO> bookDTOList = new ArrayList<>();
+        for (Book book : bookList) {
+            bookDTOList.add(bookMapper.bookToBookDTO(book));
+        }
+        return bookDTOList;
     }
 
     @Override
@@ -53,12 +59,12 @@ public class BookServiceJPAImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> updateBook(UUID uuidBook, Book bookUpdated) {
+    public Optional<Book> updateBook(UUID uuidBook, BookDTO bookDTOUpdated) {
         // Buscar libro por ID
         Optional<Book> bookOptional = bookRepository.findById(uuidBook);
 
         if(bookOptional.isPresent()){
-            updatingBook(bookOptional.get(), bookUpdated);
+            updatingBook(bookOptional.get(), bookDTOUpdated);
             //Save --> Si existe entonces lo actualiza  y si no lo crea
             return Optional.of(bookRepository.save(bookOptional.get()));
 
@@ -86,13 +92,15 @@ public class BookServiceJPAImpl implements BookService {
         return Optional.empty();
     }
 
-    private void updatingBook(Book book, Book bookUpdated){
-        if (bookUpdated.getTitle() != null){
-            book.setTitle(bookUpdated.getTitle());
+    private void updatingBook(Book book, BookDTO bookDTOUpdated){
+        Optional<Author> optionalAuthor = authorRepository.findById(UUID.fromString(bookDTOUpdated.getIdAuthor()));
+
+        if (bookDTOUpdated.getTitle() != null){
+            book.setTitle(bookDTOUpdated.getTitle());
         }
 
-        if (bookUpdated.getAuthor() != null){
-            book.setAuthor(bookUpdated.getAuthor());
+        if (optionalAuthor.isPresent()){
+            book.setAuthor(optionalAuthor.get());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.info.infoprimeraapp.service.book.impl;
 
+import com.info.infoprimeraapp.domain.Author;
 import com.info.infoprimeraapp.domain.Book;
 import com.info.infoprimeraapp.mapper.book.BookMapper;
 import com.info.infoprimeraapp.model.dto.book.BookDTO;
@@ -42,8 +43,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return new ArrayList<>(bookMap.values());
+    public List<BookDTO> getAllBooks() {
+        List<BookDTO> bookDTOList = new ArrayList<>();
+        for (Book book : bookMap.values()) {
+            bookDTOList.add(bookMapper.bookToBookDTO(book));
+        }
+        return bookDTOList;
     }
 
     @Override
@@ -68,8 +73,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> updateBook(UUID uuidBook, Book bookUpdated) {
+    public Optional<Book> updateBook(UUID uuidBook, BookDTO bookDTOUpdated) {
         Book book = bookMap.get(uuidBook);
+        Book bookUpdated = bookMapper.bookDTOtoBook(bookDTOUpdated);
 
         if(book != null){
             updatingBook(book, bookUpdated);
@@ -97,13 +103,15 @@ public class BookServiceImpl implements BookService {
     }
 
     private void updatingBook(Book book, Book bookUpdated){
+
         if (bookUpdated.getTitle() != null){
             book.setTitle(bookUpdated.getTitle());
         }
 
-        if (bookUpdated.getAuthor() != null){
+        /*
+        if (bookDTOUpdated.getIdAuthor() .getAuthor() != null){
             book.setAuthor(bookUpdated.getAuthor());
-        }
+        }*/
     }
 
     private boolean deleteBookByName(String title){
