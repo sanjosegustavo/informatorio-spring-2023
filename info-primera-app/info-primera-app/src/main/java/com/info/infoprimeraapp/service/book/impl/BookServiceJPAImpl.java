@@ -2,11 +2,15 @@ package com.info.infoprimeraapp.service.book.impl;
 
 import com.info.infoprimeraapp.domain.Author;
 import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.domain.Categoria;
 import com.info.infoprimeraapp.exceptions.NotFoundException;
 import com.info.infoprimeraapp.mapper.book.BookMapper;
+import com.info.infoprimeraapp.mapper.book.BookResponseMapper;
 import com.info.infoprimeraapp.model.dto.book.BookDTO;
+import com.info.infoprimeraapp.model.dto.book.BookResponseDTO;
 import com.info.infoprimeraapp.repository.author.AuthorRepository;
 import com.info.infoprimeraapp.repository.book.BookRepository;
+import com.info.infoprimeraapp.repository.categoria.CategoriaRepository;
 import com.info.infoprimeraapp.service.book.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -25,28 +29,51 @@ public class BookServiceJPAImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorRepository authorRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final BookResponseMapper bookResponseMapper;
 
 
     @Override
-    public List<BookDTO> getAllBooks() {
+    public List<BookResponseDTO> getAllBooks() {
         List<Book> bookList = bookRepository.findAll(); // Traer todos los libros
-        List<BookDTO> bookDTOList = new ArrayList<>();
+        List<BookResponseDTO> bookResponseDTOList = new ArrayList<>();
         for (Book book : bookList) {
-            bookDTOList.add(bookMapper.bookToBookDTO(book));
+            bookResponseDTOList.add(bookResponseMapper.bookToBookResponseDTO(book));
         }
-        return bookDTOList;
+        return bookResponseDTOList;
     }
 
     @Override
     public Book createBook(BookDTO bookDTO) throws NotFoundException {
         Book book = bookMapper.bookDTOtoBook(bookDTO);
-        Optional<Author> optionalAuthor = authorRepository.findById(UUID.fromString(bookDTO.getIdAuthor()));
 
+        //Relación BOOK - AUTHOR
+        Optional<Author> optionalAuthor = authorRepository.findById(UUID.fromString(bookDTO.getIdAuthor()));
         if (optionalAuthor.isPresent()) {
             book.setAuthor(optionalAuthor.get());
-            return bookRepository.save(book);// Guardar en la base de datos
+            book = bookRepository.save(book);// Guardar en la base de datos
+        } else {
+            throw new NotFoundException();
         }
-        throw new NotFoundException();
+
+        //Relación BOOK - CATEGORIA
+        updatingCategoriasBook(book, bookDTO);
+        return bookRepository.save(book);
+    }
+
+    private void updatingCategoriasBook(Book book, BookDTO bookDTO) {
+        if(!bookDTO.getListCategoriasId().isEmpty()) {
+
+            //TAREA: EVITAR CARGAR DOS CATEGORIAS REPETIDAS EN UN LIBRO.
+
+            for (String id : bookDTO.getListCategoriasId()) {
+
+                Optional<Categoria> categoriaOptional = categoriaRepository.findById(UUID.fromString(id));
+                if (categoriaOptional.isPresent()) {
+                     book.addCategoria(categoriaOptional.get());
+                }
+            }
+        }
     }
 
     @Override

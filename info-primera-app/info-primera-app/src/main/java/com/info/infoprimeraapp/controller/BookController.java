@@ -3,6 +3,7 @@ package com.info.infoprimeraapp.controller;
 import com.info.infoprimeraapp.domain.Book;
 import com.info.infoprimeraapp.exceptions.NotFoundException;
 import com.info.infoprimeraapp.model.dto.book.BookDTO;
+import com.info.infoprimeraapp.model.dto.book.BookResponseDTO;
 import com.info.infoprimeraapp.service.book.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class BookController {
 
     //GET --> Obtener un recurso
     @GetMapping()
-    public List<BookDTO> getAllBooks() {
+    public List<BookResponseDTO> getAllBooks() {
         log.info("Se esta haciendo una consulta por los libros");
         return bookService.getAllBooks();
     }

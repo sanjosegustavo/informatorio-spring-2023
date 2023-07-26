@@ -6,6 +6,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -25,4 +27,10 @@ public class Categoria {
 
     @Column(length = 100, columnDefinition = "varchar(100)", updatable = true, nullable = false)
     private String nombre;
+
+    @ManyToMany
+    @JoinTable(name = "book_categoria", joinColumns = @JoinColumn(name = "categoria_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Book> books = new ArrayList<>();
+
 }

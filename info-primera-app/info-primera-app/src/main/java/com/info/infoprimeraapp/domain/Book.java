@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.ManyToAny;
 import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -34,8 +35,20 @@ public class Book {
 
     private int numberPages;
 
+    @ManyToMany
+    @JoinTable(name = "book_categoria", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    private List<Categoria> categorias = new ArrayList<>();
+
     public void setAuthor(Author author) {
         this.author = author;
         author.getBooks().add(this);
+    }
+
+    public void addCategoria(Categoria categoria){
+        if (this.categorias == null) {
+            this.categorias = new ArrayList<>();
+        }
+        this.categorias.add(categoria);
     }
 }

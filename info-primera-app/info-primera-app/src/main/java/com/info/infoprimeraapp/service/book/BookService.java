@@ -3,13 +3,14 @@ package com.info.infoprimeraapp.service.book;
 import com.info.infoprimeraapp.domain.Book;
 import com.info.infoprimeraapp.exceptions.NotFoundException;
 import com.info.infoprimeraapp.model.dto.book.BookDTO;
+import com.info.infoprimeraapp.model.dto.book.BookResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BookService {
-    List<BookDTO> getAllBooks();
+    List<BookResponseDTO> getAllBooks();
 
     Book createBook(BookDTO book) throws NotFoundException;
 

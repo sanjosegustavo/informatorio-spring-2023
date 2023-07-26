@@ -1,5 +1,6 @@
 package com.info.infoprimeraapp.domain;
 
+import com.info.infoprimeraapp.enumeration.CalificationEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -33,8 +34,8 @@ public class Resena {
     @Column(length = 300, columnDefinition = "varchar(300)", updatable = true, nullable = false)
     private String contenido;
 
-    @Column(updatable = true, nullable = false)
-    private int calificacion;
+    @Enumerated(EnumType.STRING)
+    private CalificationEnum calificacion;
 
     @Column(updatable = true, nullable = false)
     @Temporal(TemporalType.DATE)

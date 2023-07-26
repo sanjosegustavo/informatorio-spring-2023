@@ -2,7 +2,9 @@ package com.info.infoprimeraapp.controller;
 
 import com.info.infoprimeraapp.domain.Categoria;
 import com.info.infoprimeraapp.exceptions.NotFoundException;
+import com.info.infoprimeraapp.model.dto.categoria.CategoriaDTO;
 import com.info.infoprimeraapp.service.categoria.CategoriaService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/categoria")
 @Slf4j
+@RequiredArgsConstructor
 public class CategoriaController {
 
     CategoriaService categoriaService;
@@ -26,13 +29,13 @@ public class CategoriaController {
     }
 
     @GetMapping()
-    public List<Categoria> getAllCategorias() {
+    public List<CategoriaDTO> getAllCategorias() {
         log.info("Consultando por todas las categorías.");
         return categoriaService.getAllCategorias();
     }
 
     @GetMapping("/{idCategoria}")
-    public Categoria getCategoriaById(@PathVariable(value = "idCategoria")UUID idCategoria) throws NotFoundException {
+    public CategoriaDTO getCategoriaById(@PathVariable(value = "idCategoria")UUID idCategoria) throws NotFoundException {
         return categoriaService.getCategoriaById(idCategoria).orElseThrow(NotFoundException::new);
     }
 }

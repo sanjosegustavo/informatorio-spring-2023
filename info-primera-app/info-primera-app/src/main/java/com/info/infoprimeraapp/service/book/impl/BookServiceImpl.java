@@ -1,9 +1,10 @@
 package com.info.infoprimeraapp.service.book.impl;
 
-import com.info.infoprimeraapp.domain.Author;
 import com.info.infoprimeraapp.domain.Book;
 import com.info.infoprimeraapp.mapper.book.BookMapper;
+import com.info.infoprimeraapp.mapper.book.BookResponseMapper;
 import com.info.infoprimeraapp.model.dto.book.BookDTO;
+import com.info.infoprimeraapp.model.dto.book.BookResponseDTO;
 import com.info.infoprimeraapp.service.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ public class BookServiceImpl implements BookService {
     Map<UUID, Book> bookMap;
 
     private final BookMapper bookMapper;
+    private final BookResponseMapper bookResponseMapper;
 
     @Autowired
-    public BookServiceImpl(BookMapper bookMapper) {
+    public BookServiceImpl(BookMapper bookMapper, BookResponseMapper bookResponseMapper) {
         this.bookMapper = bookMapper;
+        this.bookResponseMapper = bookResponseMapper;
         bookMap = new HashMap<>();
 
         Book book = new Book();
@@ -43,12 +46,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getAllBooks() {
-        List<BookDTO> bookDTOList = new ArrayList<>();
+    public List<BookResponseDTO> getAllBooks() {
+        List<BookResponseDTO> bookResponseDTOList = new ArrayList<>();
         for (Book book : bookMap.values()) {
-            bookDTOList.add(bookMapper.bookToBookDTO(book));
+            bookResponseDTOList.add(bookResponseMapper.bookToBookResponseDTO(book));
         }
-        return bookDTOList;
+        return bookResponseDTOList;
     }
 
     @Override

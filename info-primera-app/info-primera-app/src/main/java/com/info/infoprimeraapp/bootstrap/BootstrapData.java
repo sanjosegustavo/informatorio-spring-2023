@@ -1,12 +1,14 @@
 package com.info.infoprimeraapp.bootstrap;
 
 import com.info.infoprimeraapp.domain.Book;
+import com.info.infoprimeraapp.domain.Categoria;
 import com.info.infoprimeraapp.domain.Editorial;
 import com.info.infoprimeraapp.domain.Resena;
 import com.info.infoprimeraapp.model.BookCsvRecord;
 import com.info.infoprimeraapp.model.EditorialCsvRecord;
 import com.info.infoprimeraapp.model.ResenaCsvRecord;
 import com.info.infoprimeraapp.repository.book.BookRepository;
+import com.info.infoprimeraapp.repository.categoria.CategoriaRepository;
 import com.info.infoprimeraapp.repository.editorial.EditorialRepository;
 import com.info.infoprimeraapp.repository.resena.ResenaRepository;
 import com.info.infoprimeraapp.service.csv.book.BookCsvService;
@@ -38,13 +40,38 @@ public class BootstrapData implements CommandLineRunner {
     private final EditorialRepository editorialRepository;
     private final EditorialCsvService editorialCsvService;
 
+    private final CategoriaRepository categoriaRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
         log.info("Corriendo BootstrapData");
+        loadCateoriaData();
         //loadBookData();
         //loadResenaData();
         //loadEditorialData();
+    }
+
+    private void loadCateoriaData() {
+        if (categoriaRepository.count() == 0) {
+            Categoria categoria1 = Categoria.builder()
+                    .id(UUID.randomUUID())
+                    .nombre("Ficcion")
+                    .build();
+
+            Categoria categoria2 = Categoria.builder()
+                    .id(UUID.randomUUID())
+                    .nombre("Misterio")
+                    .build();
+
+            Categoria categoria3 = Categoria.builder()
+                    .id(UUID.randomUUID())
+                    .nombre("Romance")
+                    .build();
+
+            categoriaRepository.saveAll(List.of(categoria1, categoria2, categoria3));
+
+        }
     }
 
     /*
